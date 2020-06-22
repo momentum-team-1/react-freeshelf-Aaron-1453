@@ -13,87 +13,79 @@ class App extends React.Component {
   }
 
   handleClick (event) {
-    // if selectedBooks includes the id passed in, then remove it from selectedBooks
-    this.setState({
-      isExpanded: !this.state.selectedBooks.includes(parseInt(event.target.parentElement.id)),
-      selectedBooks: [...this.state.selectedBooks, parseInt(event.target.parentElement.id)]
-    })
+    // if selectedBooks array icludes id passed in
+    if (this.state.selectedBooks.includes(parseInt(event.target.parentElement.id))) {
+      // we need to remove that id from our selectedBooks array
+      this.setState({
+        isExpanded: false,
+        selectedBooks: this.state.selectedBooks.filter(id => id !== parseInt(event.target.parentElement.id))
+      })
+    } else {
+      // add the id to the selectedBooks array
+      this.setState({
+        isExpanded: !this.state.selectedBooks.includes(parseInt(event.target.parentElement.id)),
+        selectedBooks: [...this.state.selectedBooks, parseInt(event.target.parentElement.id)]
+      })
+    }
   }
 
   render () {
     console.log(this.state)
 
-    return books.map(
-      (
-        {
-          title,
-          author,
-          shortDescription,
-          url,
-          publisher,
-          publicationDate,
-          detailedDescription,
-          coverImageUrl
-        },
-        idx
-      ) => {
-        // console.log('selectedBooks includes index', this.state.selectedBooks.includes(idx))
-        return (
-          <div key={idx} id={idx}>
-            <h1>{title}</h1>
-            <h3>{author}</h3>
-            <a href={url}>{url}</a>
-            <p>{shortDescription}</p>
-            <button onClick={(event) => this.handleClick(event)}>
-              {this.state.isExpanded && this.state.selectedBooks.includes(idx) ? 'less information' : 'more information'}
-            </button>
+    return (
+      <div className='page-container'>
+        <div className='header'>
+          React Freeshelf
+        </div>
+        {books.map(
+          (
+            {
+              title,
+              author,
+              shortDescription,
+              url,
+              publisher,
+              publicationDate,
+              detailedDescription,
+              coverImageUrl
+            },
+            idx
+          ) => {
+            return (<div
+              key={idx} id={idx}
+              className='book-container'
+            >
+              <h1>{title}</h1>
+              <h3>{author}</h3>
+              <a href={url}>{url}</a>
+              <p>{shortDescription}</p>
+              <button onClick={(event) => this.handleClick(event)}>
+                {this.state.isExpanded && this.state.selectedBooks.includes(idx) ? 'less information' : 'more information'}
+              </button>
 
-            {/* if statement to conditionally render UI */}
-            {/* if (isExpanded) {
-              <div>details</div>
-            } else {
-              null
-            } */}
-
-            {/* inline if with logical && operator, same as a regular
-            if statement but more succinct */}
-            {/* {this.state.isExpanded &&
-              (
-                <div>details</div>
-              )} */}
-
-            {this.state.isExpanded && this.state.selectedBooks.includes(idx) && (
-              <div>
+              {this.state.selectedBooks.includes(idx) && (<div className='book-details'>
                 <p>
-                  Publisher:{' '}
+                                 Publisher:{' '}
                   {publisher === null ? <em>Info not available</em> : publisher}
                 </p>
                 <p>
                   Publication date:{' '}
-                  {publicationDate === null ? (
-                    <em>Info not available</em>
-                  ) : (
-                    publicationDate
-                  )}
+                  {publicationDate === null ? (<em>Info not available</em>) : (publicationDate)}
                 </p>
                 <p>Full description: {detailedDescription}</p>
-                <img
-                  onError={(event) =>
-                    event.target.setAttribute('src', './logo512.png')}
-                  src={coverImageUrl}
-                  alt='react'
-                />
+              </div>)}
+              <div className='image'>
+                <img onError={(event) => event.target.setAttribute('src', './logo512.png')} src={coverImageUrl} alt='react' />
               </div>
-            )}
-          </div>
-        )
-      }
+                    </div>)
+          }
+        )}
+        <div className='footer'>
+          © Aaron O'Brien
+        </div>
+      </div>
     )
   }
 }
 
 export default App
-
-// {publisher === null
-//   ? null
-//   : <p>Publisher: {publisher}</p>}

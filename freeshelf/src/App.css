@@ -1,0 +1,13 @@
+.book-container {
+    background-color: #E0E2DB;
+}
+
+.image {
+   float: right;
+} 
+
+.book-container {
+    text-align: left;
+    background-color: blue;
+    max-width: 60%;
+}
